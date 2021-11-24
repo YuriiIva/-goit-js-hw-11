@@ -2,45 +2,71 @@ import '../sass/main.scss';
 import axios from 'axios';
 import notiflix from 'notiflix';
 import simplelightbox from 'simplelightbox';
+import 'simplelightbox/dist/simple-lightbox.min.css';
+
 import refs from './services/refs';
 
-import fetchFoto from './services/api-services';
+import { fetchFoto, incrementPage, countPage, firstPage } from './services/api-services';
 import createMarkup from './render-markup';
-
-// async function getUser() {
-//   try {
-//     const response = await axios.get('/user?ID=12345');
-//     console.log(response);
-//   } catch (error) {
-//     console.error(error);
-//   }
-// }
 
 const handleBtnSearch = e => {
   e.preventDefault();
+  restart();
+  getFoto();
+};
+
+const restart = () => {
+  refs.div.innerHTML = '';
+  firstPage();
+};
+
+const getFoto = async () => {
   const value = refs.input.value;
-  console.log(value);
-  fetchFoto(value)
-    .then(data => {
-      console.log(data);
-      console.log(data.hits.length);
-      if (data.hits.length !== 0) {
-        renderFotos(data);
-      } else {
-        notiflix.Notify.failure(
-          'Sorry, there are no images matching your search query. Please try again.',
-        );
+  try {
+    const data = await fetchFoto(value);
+    if (data.hits.length !== 0) {
+      let allPages = Math.ceil(data.total / data.hits.length);
+
+      if (countPage() >= allPages) {
+        notiflix.Notify.failure("We're sorry, but you've reached the end of search results.");
+        refs.btnLoadMore.classList.add('is-hidden');
+        return;
       }
-    })
-    .catch(err => {
-      notiflix.Notify.failure(err.messege);
-    });
+      renderFotos(data);
+      refs.btnLoadMore.classList.remove('is-hidden');
+    } else {
+      refs.btnLoadMore.classList.add('is-hidden');
+      refs.div.innerHTML = '';
+      notiflix.Notify.failure(
+        'Sorry, there are no images matching your search query. Please try again.',
+      );
+    }
+  } catch (error) {
+    handleErro(error);
+  }
+};
+
+const handleErro = erro => {
+  refs.input.value = '';
+  refs.div.innerHTML = '';
+  notiflix.Notify.failure(erro.messege);
 };
 
 const renderFotos = data => {
-  console.log(data);
   const markup = createMarkup(data.hits);
   refs.div.insertAdjacentHTML('beforeend', markup);
-  console.log(data);
 };
+
+const onLoadMore = () => {
+  refs.btnLoadMore.classList.add('is-hidden');
+  incrementPage();
+  getFoto();
+};
+
 refs.form.addEventListener('submit', handleBtnSearch);
+refs.btnLoadMore.addEventListener('click', onLoadMore);
+
+// new SimpleLightbox('.gallery img', {
+//   captions: 'alt',
+//   captionsDelay: 250,
+// });

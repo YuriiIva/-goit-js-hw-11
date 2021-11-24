@@ -25,3 +25,56 @@
   background-size: cover;
   background-position: center;
 }
+
+button.is-hidden {
+  display: none;
+}
+.btn-search:hover {
+  background-color: #009688;
+  color: #fff;
+  border: 2px solid rgb(129, 14, 14);
+  border-radius: 15%;
+  cursor: pointer;
+}
+.btn-search {
+  margin-left: 15px;
+  background-color: rgb(211, 214, 32);
+  border: 2px solid rgb(3, 97, 53);
+  border-radius: 15%;
+}
+.search-form {
+  display: flex;
+  justify-content: center;
+  margin-top: 15px;
+  margin-bottom: 15px;
+}
+.gallery {
+  display: flex;
+  flex-wrap: wrap;
+}
+.load-more:hover {
+  background-color: #009688;
+  color: #fff;
+  border: 2px solid rgb(129, 14, 14);
+  border-radius: 15%;
+  cursor: pointer;
+}
+.load-more {
+  width: 250px;
+  height: 30px;
+  background-color: rgb(179, 197, 16);
+  border: 2px solid rgb(194, 44, 52);
+  border-radius: 15%;
+}
+.box-btn-load-more {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+.info {
+  display: flex;
+  justify-content: space-around;
+}
+.info-icon {
+  margin-left: 10px;
+}
