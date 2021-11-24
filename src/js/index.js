@@ -1,13 +1,15 @@
 import '../sass/main.scss';
 import axios from 'axios';
 import notiflix from 'notiflix';
-import simplelightbox from 'simplelightbox';
+import SimpleLightbox from 'simplelightbox';
 import 'simplelightbox/dist/simple-lightbox.min.css';
 
 import refs from './services/refs';
 
 import { fetchFoto, incrementPage, countPage, firstPage } from './services/api-services';
 import createMarkup from './render-markup';
+
+let lightbox = null;
 
 const handleBtnSearch = e => {
   e.preventDefault();
@@ -34,6 +36,10 @@ const getFoto = async () => {
       }
       renderFotos(data);
       refs.btnLoadMore.classList.remove('is-hidden');
+      lightbox = new SimpleLightbox('.gallery a', {
+        captions: 'alt',
+        captionsDelay: 250,
+      });
     } else {
       refs.btnLoadMore.classList.add('is-hidden');
       refs.div.innerHTML = '';
@@ -61,12 +67,13 @@ const onLoadMore = () => {
   refs.btnLoadMore.classList.add('is-hidden');
   incrementPage();
   getFoto();
+  lightbox.refresh();
 };
 
 refs.form.addEventListener('submit', handleBtnSearch);
 refs.btnLoadMore.addEventListener('click', onLoadMore);
 
-// new SimpleLightbox('.gallery img', {
+// let lightbox = new SimpleLightbox('.gallery a', {
 //   captions: 'alt',
 //   captionsDelay: 250,
-// });
+// }).refresh();

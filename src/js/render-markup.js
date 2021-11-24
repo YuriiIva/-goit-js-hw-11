@@ -2,9 +2,9 @@ const createMarkup = data => {
   console.log(data);
   return data
     .map(
-      ({ webformatURL, tags, likes, views, comments, downloads }) =>
+      ({ webformatURL, tags, likes, views, comments, downloads, largeImageURL }) =>
         `<div class="photo-card">
-  <img src="${webformatURL}" alt="${tags}" loading="lazy" />
+  <a href="${largeImageURL}"><img src="${webformatURL}" alt="${tags}" loading="lazy" /></a>
   <div class="info">
     <p class="info-item">
       <b >Likes: ${likes}</b>
